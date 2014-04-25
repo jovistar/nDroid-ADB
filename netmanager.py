@@ -7,11 +7,9 @@ from msgmanager import MsgManager
 import ndutil
 
 class NetManager(DatagramProtocol):
-	def __init__(self):
-		self.msgManager = MsgManager()
-
 	def setNdlCom(self, ndlCom):
 		self.ndlCom = ndlCom
+		self.msgManager = MsgManager()
 
 	def setDbManager(self, dbManager):
 		self.dbManager = dbManager
@@ -32,7 +30,7 @@ class NetManager(DatagramProtocol):
 					responseData['response'] = 1
 				else:
 					responseData['response'] = 0
-					self.dbManager.create(uid, result['result'], ndutil.getCreated())
+					self.dbManager.create(result['uid'], result['result'], ndutil.getCreated())
 
 			if result['request'] == 'delete':
 				self.ndlCom.doCom('Request: DELETE')

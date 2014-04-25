@@ -9,7 +9,7 @@ class DbManager():
 
 	def create(self, uid, result, lastop):
 		value = (0, uid, result, lastop)
-		self.dbCursor.execute('insert into adb values(%s,%s,%s,%s', value)
+		self.dbCursor.execute('insert into adb values(%s,%s,%s,%s)', value)
 		self.dbCon.commit()
 
 	def update(self, uid, result, lastop):
@@ -32,16 +32,16 @@ class DbManager():
 	def getId(self, uid):
 		count = self.dbCursor.execute('select aid from adb where uid=%s', uid)
 		if count:
-			aid = dbCursor.fetchone()
-			return aid
+			aid = self.dbCursor.fetchone()
+			return aid[0]
 		else:
 			return None
 
 	def getLastop(self):
 		count = self.dbCursor.execute('select lastop from adb where uid=%s', uid)
 		if count:
-			lastop = dbCursor.fetchone()
-			return lastop
+			lastop = self.dbCursor.fetchone()
+			return lastop[0]
 		else:
 			return None
 
