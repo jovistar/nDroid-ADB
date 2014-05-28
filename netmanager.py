@@ -37,7 +37,7 @@ class NetManager(DatagramProtocol):
             msg = self.msgManager.genResponse(responseData)
             self.transport.write(msg, (host, port))
 
-     def dispatch_create_item(self, uid, state):
+    def dispatch_create_item(self, uid, state):
         responseData = {}
         if state not in ['b', 'm', 'u']:
             responseData['response'] = 1
@@ -49,8 +49,8 @@ class NetManager(DatagramProtocol):
             self.dbManager.create_item(uid, state, ndutil.getCreated())
             responseData['response'] = 0
         return responseData
-        
-     def dispatch_delete_item(self, uid):
+
+    def dispatch_delete_item(self, uid):
         responseData = {}
         if self.dbManager.exists(uid):
             self.dbManager.delete_item(uid)
@@ -59,7 +59,7 @@ class NetManager(DatagramProtocol):
             responseData['response'] = 1
         return responseData
 
-     def dispatch_update_state(self, uid, state):
+    def dispatch_update_state(self, uid, state):
         responseData = {}
         
         if state not in ['b', 'm', 'u']:
@@ -73,7 +73,7 @@ class NetManager(DatagramProtocol):
             responseData = self.dispatch_create_item(uid, state)
         return responseData
 
-     def dispatch_get_item(self, uid):
+    def dispatch_get_item(self, uid):
         responseData = {}
         result = self.dbManager.get_item(uid)
         if result == None:
@@ -83,7 +83,7 @@ class NetManager(DatagramProtocol):
             responseData['item'] = result
         return responseData
 
-     def dispatch_get_state(self, uid):
+    def dispatch_get_state(self, uid):
         responseData = {}
         result = self.dbManager.get_state(uid)
         if result == None:
@@ -92,8 +92,8 @@ class NetManager(DatagramProtocol):
             responseData['response'] = 0
             responseData['state'] = result
         return responseData
-      
-     def dispatch_get_last_update(self, uid):
+
+    def dispatch_get_last_update(self, uid):
         responseData = {}
         result = self.dbManager.get_last_update(uid)
         if result == None:

@@ -4,7 +4,7 @@ import MySQLdb
 
 class DbManager():
     def __init__(self, dbHost, dbUser, dbPass, dbName):
-        sell.dbCon = MySQLdb.connect(host=dbHost, user=dbUser, passwd=dbPass, db=dbName, charset='utf8')
+        self.dbCon = MySQLdb.connect(host=dbHost, user=dbUser, passwd=dbPass, db=dbName, charset='utf8')
         self.dbCursor = self.dbCon.cursor()
 
     def create_table(self):
