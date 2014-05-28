@@ -5,62 +5,85 @@ import json
 import os
 
 class NdaCom():
-	def __init__(self, host, port):
-		self.address = (host, port)
-		self.s = socket.socket(socket.AF_INET, socket.SOCK_DGRAM)
+    def __init__(self, host, port):
+        self.address = (host, port)
+        self.s = socket.socket(socket.AF_INET, socket.SOCK_DGRAM)
 
-	def create(self, uid, res):
-		data = {}
-		if res not in ['b', 'm', 'u']:
-			return 1
+    def create_item(self, uid, state):
+        data = {}
+        if state not in ['b', 'm', 'u']:
+            return 1
 
-		data['request'] = 'create'
-		data['uid'] = uid
-		data['result'] = res
+        data['request'] = 'create_item'
+        data['uid'] = uid
+        data['state'] = state
 
-		result = self.doCom(data)
-		if result['response'] != 0:
-			return 1
-		return 0
+        result = self.do_com(data)
+        if result['response'] != 0:
+            return 1
+        return 0
 
-	def delete(self, uid):
-		data = {}
-		data['request'] = 'delete'
-		data['uid'] = uid
+    def delete_item(self, uid):
+        data = {}
+        
+        data['request'] = 'delete_item'
+        data['uid'] = uid
 
-		result = self.doCom(data)
-		if result['response'] != 0:
-			return 1
-		return 0
+        result = self.do_com(data)
+        if result['response'] != 0:
+            return 1
+        return 0
 
-	def update(self, uid, res):
-		data = {}
-		if res not in ['b', 'm', 'u']:
-			return 1
+    def do_com(self, data):
+        msg = json.dumps(data)
+        self.s.sendto(msg, self.address)
+        result, addr = self.s.recvfrom(40960)
+        
+        return json.loads(result)
 
-		data['request'] = 'update'
-		data['uid'] = uid
-		data['result'] = res
+    def update_item_state(self, uid, state):
+        data = {}
+        if state not in ['b', 'm', 'u']:
+            return 1
 
-		result = self.doCom(data)
-		if result['response'] != 0:
-			return 1
-		return 0
+        data['request'] = 'update_state'
+        data['uid'] = uid
+        data['state'] = state
 
-	def get(self, uid):
-		data = {}
+        result = self.do_com(data)
+        if result['response'] != 0:
+            return 1
+        return 0
 
-		data['request'] = 'get'
-		data['uid'] = uid
+    def get_item(self, uid):
+        data = {}
 
-		result = self.doCom(data)
-		if result['response'] != 0:
-			return 1, '', ''
-		return 0, result['result'], result['lastop']
+        data['request'] = 'get_item'
+        data['uid'] = uid
 
-	def doCom(self, data):
-		msg = json.dumps(data)
-		self.s.sendto(msg, self.address)
-		result,addr = self.s.recvfrom(4096)
+        result = self.do_com(data)
+        if result['response'] != 0:
+            return 1, ()
+        return 0, data['item']
 
-		return json.loads(result)
+    def get_item_state(self, uid):
+        data = {}
+
+        data['request'] = 'get_state'
+        data['uid'] = uid
+     
+        result = self.do_com(data)
+        if result['response'] != 0:
+            return 1, ''
+        return 0, result['state']
+
+    def get_item_last_update(self, uid):
+        data = {}
+
+        data['request'] = 'get_last_update'
+        data['uid'] = uid
+
+        result = self.do_com(data)
+        if result['response'] != 0:
+            return 1, ''
+        return 0, result['last_update']

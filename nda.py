@@ -17,7 +17,7 @@ def nda_loop():
 	ndlCom.doCom('Loading Config')
 	cnfManager = CnfManager()
 	cnfManager.load('./nda.cnf')
-	cnfData = cnfManager.getCnfData()
+	cnfData = cnfManager.get_cnf_data()
 
 	ndlCom.doCom('Connecting to DB')
 	dbManager = DbManager(cnfData['dbHost'], cnfData['dbUser'], cnfData['dbPass'], cnfData['dbName'])

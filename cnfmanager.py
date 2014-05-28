@@ -18,5 +18,5 @@ class CnfManager():
 		self.cnfData['dbName'] = cf.get('db', 'dbName')
 		self.cnfData['comPort'] = int(cf.get('com', 'comPort'))
 
-	def getCnfData(self):
+	def get_cnf_data(self):
 		return self.cnfData
