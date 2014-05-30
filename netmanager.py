@@ -28,9 +28,9 @@ class NetManager(DatagramProtocol):
             elif result['request'] == 'update_state':
                 responseData = self.dispatch_update_state(result['uid'], result['state'])
             elif result['request'] == 'get_item':
-                responseData = self.dispatch.get_item(result['uid'])
+                responseData = self.dispatch_get_item(result['uid'])
             elif result['request'] == 'get_state':
-                responseData = self.dispatch.get_state(result['uid'])
+                responseData = self.dispatch_get_state(result['uid'])
             elif result['request'] == 'get_last_update':
                 responseData = self.dispatch_get_last_update(result['uid'])
 
@@ -44,7 +44,7 @@ class NetManager(DatagramProtocol):
             return responseData
         
         if self.dbManager.exists(uid):
-            responseData = self.dispatch_update_item(uid, state)
+            responseData = self.dispatch_update_state(uid, state)
         else:
             self.dbManager.create_item(uid, state, ndutil.getCreated())
             responseData['response'] = 0
@@ -70,7 +70,8 @@ class NetManager(DatagramProtocol):
             self.dbManager.update_state(uid, state, ndutil.getCreated())
             responseData['response'] = 0
         else:
-            responseData = self.dispatch_create_item(uid, state)
+            #responseData = self.dispatch_create_item(uid, state)
+            responseData['response'] = 1
         return responseData
 
     def dispatch_get_item(self, uid):

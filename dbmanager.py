@@ -25,9 +25,9 @@ class DbManager():
         self.dbCursor.execute('DELETE FROM adb WHERE uid=%s', (uid, ))
         self.dbCon.commit()
 
-    def update_state(self, uid, state):
-        value = (state, uid)
-        self.dbCursor.execute('UPDATE adb SET state=%s WHERE uid=%s', value)
+    def update_state(self, uid, state, last_update):
+        value = (state, last_update, uid)
+        self.dbCursor.execute('UPDATE adb SET state=%s,last_update=%s WHERE uid=%s', value)
         self.dbCon.commit()
 
     def get_item(self, uid):
